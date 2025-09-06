@@ -1,0 +1,95 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RemoteFunction = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Framework"):WaitForChild("Network"):WaitForChild("Remote"):WaitForChild("RemoteFunction")
+local LocalData = require(ReplicatedStorage.Client.Framework.Services.LocalData)
+
+-- 🐾 All pet.Id strings to keep enchanted
+local targetPetIds = {
+    "ba30e581-186c-4a5a-be81-dd8e1441f856", -- Super Trophy
+    "3644bf50-0d03-4921-bb1e-efc9e9c26a2f", -- Fallen Angel
+    "b4f200d7-9f59-4b54-bca5-c993a6340bdf", -- Diamond Overlord
+    "52007fb8-9d0b-45c3-b718-9d9c2954e96d", -- Fallen Angel
+    "165fed3f-48bf-4d60-9bb4-e51396274ce0", -- Diamond Overlord
+    "53bf84a7-de60-4013-948a-bf763954d409", -- Diamond Overlord
+    "c978ec64-a08c-45b0-8ba5-7cd7f478f123", -- Diamond Overlord
+    "bea6f3cc-4a92-4a7e-be70-16c5e56253f3"  -- Diamond Overlord
+}
+
+local targetEnchant = "secret-hunter"
+local targetLevel = 1
+
+-- 🔄 State
+local petsToHandle = {} -- queue of pet.Id values
+local checkingDelay = 2 -- seconds between checks (faster than 5)
+
+local function hasDesiredEnchant(pet)
+    for _, enchant in pairs(pet.Enchants or {}) do
+        if enchant.Id == targetEnchant and enchant.Level == targetLevel then
+            return true
+        end
+    end
+    return false
+end
+
+local function getPetById(petId)
+    local data = LocalData:Get()
+    if not data or not data.Pets then return nil end
+
+    for _, pet in pairs(data.Pets) do
+        if pet.Id == petId then
+            return pet
+        end
+    end
+
+    return nil
+end
+
+local function isQueued(petId)
+    for _, id in ipairs(petsToHandle) do
+        if id == petId then
+            return true
+        end
+    end
+    return false
+end
+
+-- 👀 Check every few seconds for missing enchants
+task.spawn(function()
+    while true do
+        local data = LocalData:Get()
+        if data and data.Pets then
+            for _, pet in pairs(data.Pets) do
+                if table.find(targetPetIds, pet.Id) and not hasDesiredEnchant(pet) and not isQueued(pet.Id) then
+                    print("📥 Queuing pet for reroll:", pet.Id)
+                    table.insert(petsToHandle, pet.Id)
+                end
+            end
+        end
+        task.wait(checkingDelay) -- now 2s
+    end
+end)
+
+-- 🔁 Process reroll queue one by one
+while true do
+    if #petsToHandle > 0 then
+        local petId = table.remove(petsToHandle, 1)
+        print("🔁 Rerolling pet:", petId)
+
+        while true do
+            local pet = getPetById(petId)
+            if not pet then
+                warn("❌ Pet not found:", petId)
+                break
+            end
+
+            if hasDesiredEnchant(pet) then
+                print("✅ Pet", petId, "has desired enchant, done.")
+                break
+            end
+
+            RemoteFunction:InvokeServer("RerollEnchants", petId, "Gems")
+            task.wait(0.2) -- shorter delay
+        end
+    else
+        task.wait(0.1) -- idle wait shortened
+    end
+end
