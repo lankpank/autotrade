@@ -39,7 +39,7 @@ getgenv().bgsInfConfig = {
     ALWAYS_EGG_ELIXIR = false,
     ALWAYS_SECRET_ELIXIR = false,
 
-    IGNORE_SEASON_CHALLENGES = false,
+    IGNORE_SEASON_CHALLENGES = true,
     IGNORE_EQUIP_BEST_PET = true,
 
     WEBHOOK_URL = "https://discord.com/api/webhooks/1409541809662857347/PDZx8xT5PoT00LY2EMFtPVxf4JBjtEu4PnoUN5cBMfnpjNipHym67vw3DoyPAbJXVt7j",
