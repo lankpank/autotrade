@@ -31,15 +31,16 @@ getgenv().bgsInfConfig = {
     ENCHANT_TEAMUP = false,
     ENCHANT_TEAMUP_TIER = 3,
 
-    AUTO_BOUNTY_RIFT = true,
-    MIN_RIFT_MULTIPLIER = 10,
-    HATCH_1X_EGG = {"Nightmare Egg"},
+    AUTO_BOUNTY_RIFT = false,
+    MIN_RIFT_MULTIPLIER = 1,
+    RIFT_EGGS = {"Brainrot Egg", "Bee Egg"},
+    HATCH_1X_EGG = {"Classic Egg"},
     ALWAYS_INFINITY_ELIXIR = true,
     ALWAYS_EGG_ELIXIR = false,
     ALWAYS_SECRET_ELIXIR = false,
 
     IGNORE_SEASON_CHALLENGES = false,
-    IGNORE_EQUIP_BEST_PET = false,
+    IGNORE_EQUIP_BEST_PET = true,
 
     WEBHOOK_URL = "https://discord.com/api/webhooks/1409541809662857347/PDZx8xT5PoT00LY2EMFtPVxf4JBjtEu4PnoUN5cBMfnpjNipHym67vw3DoyPAbJXVt7j",
     DISCORD_ID = "324553736053719040",
