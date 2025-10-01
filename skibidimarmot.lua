@@ -8,7 +8,7 @@ getgenv().bgsInfConfig = {
     GIVE_BUBBLE_SHRINE = {"Coins", "Tickets"},
     MIN_GIVE_BUBBLE_SHRINE = 1000,
     MASTERY_BUFFS_LEVEL = 20, 
-    ENCHANT_HIGH_ROLLER = true,
+    ENCHANT_HIGH_ROLLER = false,
 
     PURCHASE_ALIENSHOP = true,
     PURCHASE_BLACKMARKET = true,
@@ -31,21 +31,21 @@ getgenv().bgsInfConfig = {
     ENCHANT_TEAMUP = false,
     ENCHANT_TEAMUP_TIER = 3,
 
-    AUTO_BOUNTY_RIFT = false,
+    AUTO_BOUNTY_RIFT = true,
     MIN_RIFT_MULTIPLIER = 1,
     RIFT_EGGS = {"Brainrot Egg", "Bee Egg"},
     HATCH_1X_EGG = {"Classic Egg"},
     ALWAYS_INFINITY_ELIXIR = true,
-    ALWAYS_EGG_ELIXIR = false,
-    ALWAYS_SECRET_ELIXIR = false,
+    ALWAYS_EGG_ELIXIR = true,
+    ALWAYS_SECRET_ELIXIR = true,
 
     IGNORE_SEASON_CHALLENGES = true,
     IGNORE_EQUIP_BEST_PET = true,
 
-    WEBHOOK_URL = "https://discord.com/api/webhooks/1409541809662857347/PDZx8xT5PoT00LY2EMFtPVxf4JBjtEu4PnoUN5cBMfnpjNipHym67vw3DoyPAbJXVt7j",
+    WEBHOOK_URL = "https://discord.com/api/webhooks/1217192873611628616/_idFM4Mk1Si7McZI_Z_B-Sn_6JIuBDRDsA7a2e4Q895U4IxyDBIoc9yGwA6ot5S21NIb",
     DISCORD_ID = "324553736053719040",
     WEBHOOK_NOTE = "skibidi",
-    WEBHOOK_ODDS = "10k",
+    WEBHOOK_ODDS = "1m",
     SHOW_PET_WEBHOOK_USERNAME = true,
 }
 
