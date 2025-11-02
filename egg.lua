@@ -4,7 +4,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
 
 -- 👇 Target egg name
-local EGG_NAME = "Sinister Egg"
+local EGG_NAME = "Dreamer Egg"
 
 -- 👇 First teleport position
 local firstPosition = Vector3.new(-4922.60, 25.96, -548.99)
