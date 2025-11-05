@@ -11,7 +11,7 @@ local PetsModule = require(
 )
 
 -- 🧠 Webhook
-local WEBHOOK_URL = "https://discord.com/api/webhooks/1047909018552762399/gLwaPvSLz6DI8zPSHbJqfQ_6sNSl0TLBeWSovqJLp9_ti9vQjOgBjWx-rxETROxdznwk"
+local WEBHOOK_URL = "https://discord.com/api/webhooks/1435607930413121586/wnwODq5PbEBBvJI39A7373bbRazm1CDcfU4eCT8N7FS-2UaJpxh0ji0vbggfr5kMpxVO"
 
 -- Discord ID to ping (replace with your ID)
 local DISCORD_ID = "619522585964576795"
