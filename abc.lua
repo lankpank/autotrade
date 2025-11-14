@@ -14,7 +14,11 @@ local pets = {
     "OG Diamond Ring",
     "OG Frost Sentinel",
     "Mystical Galaxy",
-    "Nekomata", 
+    "Nekomata",
+    "Grand Guardian",
+    "God Tamer",
+    "Guardian Angel",
+    "Shadow Raven",
     "Ghost Wisps"
 } 
 
