@@ -27,7 +27,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Remote = require(ReplicatedStorage.Shared.Framework.Network.Remote)
 
 local HttpRequest = (http and http.request) or (syn and syn.request) or (fluxus and fluxus.request) or (krnl and request)
-local webhook = "https://discord.com/api/webhooks/1438558285690175578/b9oMUo5Fme7YftRWWBV3Ojj5G9EdLqc3aasGWQ9yjDPR6L0EkMQLiU-7DuvHzDPv0O4d"
+local webhook = "https://discord.com/api/webhooks/1439362633932345626/GEgEz-DMscb8xFJ1rY4uQrWzlPVqZACR0XtKkpiFUMEQBDUQ0zh5JGS6_x8vEhSwz5x-"
 
 if not webhook:lower():match("^https://") then
     error("Invalid webhook URL. Must start with https://")
