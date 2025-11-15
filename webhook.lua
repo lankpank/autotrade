@@ -1,7 +1,7 @@
 local HttpService = game:GetService("HttpService")
 
 -- 🧩 Your Discord webhook URL
-local WEBHOOK_URL = "https://discord.com/api/webhooks/1435952390128795750/eU3gTWOZT2QB1QG4XSUec8bTNYab4xOmQWS-EIcof8yvSL_M-QATPo_3jgFuf6aayTYh"
+local WEBHOOK_URL = "https://discord.com/api/webhooks/1439362633932345626/GEgEz-DMscb8xFJ1rY4uQrWzlPVqZACR0XtKkpiFUMEQBDUQ0zh5JGS6_x8vEhSwz5x-"
 
 -- 🧩 Your Discord User ID (to ping you)
 local DISCORD_USER_ID = "619522585964576795" -- replace this with yours
