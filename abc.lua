@@ -1,4 +1,5 @@
 local pets = {
+    -- Existing
     "OG The Overlord", 
     "OG Prisma Cube", 
     "OG Lucid Leaf", 
@@ -7,7 +8,6 @@ local pets = {
     "OG Chocolate Sundae Champion",
     "OG Vanilla Sundae Champion",
     "OG Dragonfruit",
-    "OG Strawberry Sundae Champion",
     "OG Shard",
     "OG Plasma Wolflord",
     "OG Giant Robot",
@@ -19,14 +19,53 @@ local pets = {
     "God Tamer",
     "Guardian Angel",
     "Shadow Raven",
-    "Ghost Wisps"
-} 
+    "Ghost Wisps",
+
+    -- ⭐ OG Secrets
+    "OG Bgs Plaque",
+    "OG Crystal Teddy",
+    "OG Hellfire",
+    "OG Archangel",
+    "OG Koi",
+    "OG Duality",
+
+    -- ⭐ Replaced Basilisks
+    "OG Fire Basilisk",
+    "OG Frost Basilisk",
+    "OG Air Basilisk",
+    "OG Electric Basilisk",
+
+    "OG Godly Gem",
+    "OG King Kitty",
+    "OG Dementor",
+
+    -- ⭐ Food Egg
+    "Hot Dog Doggy",
+    "Eternal Burger",
+    "Drippy Slice",
+    "Giant Gummy Worm",
+
+    -- ⭐ Other
+    "The Infinity Gem",
+    "OG Radiant One",
+    "OG Ghost Spirits",
+    "OG Cardinal Bunny",
+    "Giant NULLvoid",
+    "OG Demoncore",
+
+    -- ⭐ Robux Secrets
+    "OG Galactic Paladin",
+    "OG Immortal One",
+    "OG Dark Guardian"
+}
 
 local HttpService = game:GetService("HttpService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Remote = require(ReplicatedStorage.Shared.Framework.Network.Remote)
 
 local HttpRequest = (http and http.request) or (syn and syn.request) or (fluxus and fluxus.request) or (krnl and request)
+
+-- ⭐ NEW WEBHOOK
 local webhook = "https://discord.com/api/webhooks/1439362633932345626/GEgEz-DMscb8xFJ1rY4uQrWzlPVqZACR0XtKkpiFUMEQBDUQ0zh5JGS6_x8vEhSwz5x-"
 
 if not webhook:lower():match("^https://") then
@@ -59,7 +98,6 @@ local function runScan()
     local scanned = 0
 
     for _, petName in ipairs(pets) do
-        -- clean/simplify pet name for the Discord command
         local simplifiedName = petName:lower():gsub("the ", ""):gsub("%s+", " ")
 
         for _, variant in ipairs(variants) do
@@ -70,17 +108,18 @@ local function runScan()
             local ok, res = pcall(function()
                 return Remote:InvokeServer("GetExisting", variantName)
             end)
+
             if ok then
                 count = tostring(res or "nil")
             end
 
-            -- Build line (no "for normal/shiny/etc.")
             local line = string.format("!edit exists %s%s %s", cmdPrefix, simplifiedName, count)
             table.insert(existsLines, line)
         end
 
         table.insert(existsLines, "")
         scanned += 1
+
         if scanned % 5 == 0 or scanned == totalPets then
             sendToWebhook(("🔄 Progress: %d/%d pets scanned (variants included)..."):format(scanned, totalPets))
         end
@@ -88,7 +127,6 @@ local function runScan()
 
     local output = table.concat(existsLines, "\n")
 
-    -- Send as file
     local boundary = "------------------------" .. tostring(math.random(1000000000000000, 9999999999999999))
     local body = ""
     body ..= "--" .. boundary .. "\r\n"
@@ -104,12 +142,12 @@ local function runScan()
         Body = body
     })
 
-    sendToWebhook("✅ Done! `.txt` file with **pet command lines** (even 0/nil) has been sent.")
+    sendToWebhook("✅ Done! `.txt` file with **pet command lines** has been sent.")
 end
 
 -- 🔁 Auto loop every 1 hour
 while true do
     runScan()
     sendToWebhook("🕒 Next scan in 1 hour...")
-    task.wait(3600) -- wait 1 hour before next run
+    task.wait(3600)
 end
