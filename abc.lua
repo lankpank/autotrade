@@ -22,7 +22,7 @@ local pets = {
     "Ghost Wisps",
 
     -- ⭐ OG Secrets
-    "OG Bgs Plaque",
+    "OG BGS Plaque",
     "OG Crystal Teddy",
     "OG Hellfire",
     "OG Archangel",
@@ -31,7 +31,7 @@ local pets = {
 
     -- ⭐ Replaced Basilisks
     "OG Fire Basilisk",
-    "OG Frost Basilisk",
+    "OG Ice Basilisk",
     "OG Air Basilisk",
     "OG Electric Basilisk",
 
@@ -48,7 +48,8 @@ local pets = {
     -- ⭐ Other
     "The Infinity Gem",
     "OG Radiant One",
-    "OG Ghost Spirits",
+    "OG Angelic Ghost Spirit",
+    "OG Demonic Ghost Spirit"
     "OG Cardinal Bunny",
     "Giant NULLvoid",
     "OG Demoncore",
