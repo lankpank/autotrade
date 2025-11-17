@@ -49,7 +49,7 @@ local pets = {
     "The Infinity Gem",
     "OG Radiant One",
     "OG Angelic Ghost Spirit",
-    "OG Demonic Ghost Spirit"
+    "OG Demonic Ghost Spirit",
     "OG Cardinal Bunny",
     "Giant NULLvoid",
     "OG Demoncore",
