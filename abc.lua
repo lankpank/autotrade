@@ -20,6 +20,9 @@ local pets = {
     "Guardian Angel",
     "Shadow Raven",
     "Ghost Wisps",
+    "Harmonic Harp",
+    "King Leviathan",
+    "Axolotl Army",
 
     -- ⭐ OG Secrets
     "OG BGS Plaque",
