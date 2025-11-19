@@ -99,7 +99,7 @@ local function runScan()
     local scanned = 0
 
     for _, petName in ipairs(pets) do
-        local simplifiedName = petName:lower():gsub("the ", ""):gsub("%s+", " ")
+        local simplifiedName = petName:lower():gsub("%s+", " ")
 
         for _, variant in ipairs(variants) do
             local _, cmdPrefix, searchPrefix = unpack(variant)
