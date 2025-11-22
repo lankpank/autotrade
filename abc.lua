@@ -12,17 +12,13 @@ local pets = {
     "OG Plasma Wolflord",
     "OG Giant Robot",
     "OG Diamond Ring",
-    "OG Frost Sentinel",
-    "Mystical Galaxy",
-    "Nekomata",
     "Grand Guardian",
     "God Tamer",
     "Guardian Angel",
     "Shadow Raven",
-    "Ghost Wisps",
-    "Harmonic Harp",
-    "King Leviathan",
-    "Axolotl Army",
+    "Lucky Pyramidium",
+    "OG Hellshard",
+    "OG Overlord Plushie",
 
     -- ⭐ OG Secrets
     "OG BGS Plaque",
@@ -43,10 +39,19 @@ local pets = {
     "OG Dementor",
 
     -- ⭐ Food Egg
-    "Hot Dog Doggy",
-    "Eternal Burger",
-    "Drippy Slice",
-    "Giant Gummy Worm",
+    "Infinity Wisp",
+    "Giant Fall Turkey",
+    "The Cornucopia",
+    "OG Godly Shamrock",
+    "OG Eternal Heart",
+    "Fairylight Kitsune",
+    "Pumpkin Pie",
+    "OG Love Thief",
+    "OG wolflord ",
+    "OG Soul Heart",
+    "Mega Mech",
+    "OG Owolord",
+    "Harvest Dogcat",
 
     -- ⭐ Other
     "The Infinity Gem",
@@ -57,10 +62,6 @@ local pets = {
     "Giant NULLvoid",
     "OG Demoncore",
 
-    -- ⭐ Robux Secrets
-    "OG Galactic Paladin",
-    "OG Immortal One",
-    "OG Dark Guardian"
 }
 
 local HttpService = game:GetService("HttpService")
