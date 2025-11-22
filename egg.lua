@@ -4,8 +4,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
 
 -- 👇 Target egg name
-local EGG_NAME = "Corn Egg"
+local EGG_NAME = "Sinister Egg"
 
+-- 👇 First teleport position
+local firstPosition = Vector3.new(-4922.60, 25.96, -548.99)
 
 -- ✅ Wait until character is ready
 if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
@@ -14,7 +16,12 @@ end
 
 local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
 
+-- 🌀 Step 1: Teleport to first coordinates
+humanoidRootPart.CFrame = CFrame.new(firstPosition)
+print("Teleported to first position:", firstPosition)
 
+-- ⏳ Step 2: Wait 2 seconds
+task.wait(2)
 
 -- ❌ Step 2.5: Disable egg hatching effects
 local success, err = pcall(function()
