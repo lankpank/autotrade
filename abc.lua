@@ -60,7 +60,7 @@ local pets = {
     "OG Demonic Ghost Spirit",
     "OG Cardinal Bunny",
     "Giant NULLvoid",
-    "OG Demoncore",
+    "OG Demoncore"
 
 }
 
