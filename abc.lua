@@ -33,6 +33,7 @@ local pets = {
     "OG Ice Basilisk",
     "OG Air Basilisk",
     "OG Electric Basilisk",
+    "Prismidium"
 
     "OG Godly Gem",
     "OG King Kitty",
@@ -47,10 +48,10 @@ local pets = {
     "Fairylight Kitsune",
     "Pumpkin Pie",
     "OG Love Thief",
-    "OG wolflord ",
+    "OG Wolflord",
     "OG Soul Heart",
     "Mega Mech",
-    "OG Owolord",
+    "OG OwOlord",
     "Harvest Dogcat",
 
     -- ⭐ Other
