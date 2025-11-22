@@ -4,10 +4,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
 
 -- 👇 Target egg name
-local EGG_NAME = "Sinister Egg"
+local EGG_NAME = "Corn Egg"
 
 -- 👇 First teleport position
-local firstPosition = Vector3.new(-4922.60, 25.96, -548.99)
+local firstPosition = Vector3.new(189.51, 8.60, 185.78)
 
 -- ✅ Wait until character is ready
 if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
