@@ -33,7 +33,7 @@ local pets = {
     "OG Ice Basilisk",
     "OG Air Basilisk",
     "OG Electric Basilisk",
-    "Prismidium"
+    "Prismidium",
 
     "OG Godly Gem",
     "OG King Kitty",
