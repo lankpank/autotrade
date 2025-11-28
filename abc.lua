@@ -16,7 +16,7 @@ local pets = {
     "God Tamer",
     "Guardian Angel",
     "Shadow Raven",
-    "Lucky Pyramidium",
+    "OG Lucky Pyramidium",
     "OG Hellshard",
     "OG Overlord Plushie",
 
