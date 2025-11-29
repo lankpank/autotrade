@@ -7,7 +7,8 @@ local player = Players.LocalPlayer
 local EGG_NAME = "Corn Egg"
 
 -- 👇 First teleport position
-local firstPosition = Vector3.new(189.51, 8.60, 185.78)
+local firstPosition = Vector3.new(131.18, 8.72, 91.40)
+--X: 131.18 Y: 8.72 Z: 91.40
 
 -- ✅ Wait until character is ready
 if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
