@@ -1,5 +1,15 @@
 local pets = {
     -- Existing
+    "OG Morning Star",
+    "Flake Spirit",
+    "OG Soulflake",
+    "Kuuhenki",
+    "Giant DOOF",
+    "Rudolph Shock",
+    "Cursed King",
+    "Santa's Giftbag",
+    "OG Holy Bell",
+    "King Spitty",
     "OG The Overlord", 
     "OG Prisma Cube", 
     "OG Lucid Leaf", 
