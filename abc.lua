@@ -17,6 +17,7 @@ local pets = {
     "OG Lucky Pyramidium",
     "OG Hellshard",
     "OG Overlord Plushie",
+    "Gigantic Spitty",
 
     -- ⭐ OG Secrets
     
