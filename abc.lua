@@ -10,18 +10,6 @@ local pets = {
     "Santa's Giftbag",
     "OG Holy Bell",
     "King Spitty",
-    "OG The Overlord", 
-    "OG Prisma Cube", 
-    "OG Lucid Leaf", 
-    "OG Strawberry Sundae Champion",
-    "OG Mint Sundae Champion",
-    "OG Chocolate Sundae Champion",
-    "OG Vanilla Sundae Champion",
-    "OG Dragonfruit",
-    "OG Shard",
-    "OG Plasma Wolflord",
-    "OG Giant Robot",
-    "OG Diamond Ring",
     "Grand Guardian",
     "God Tamer",
     "Guardian Angel",
@@ -31,38 +19,16 @@ local pets = {
     "OG Overlord Plushie",
 
     -- ⭐ OG Secrets
-    "OG BGS Plaque",
-    "OG Crystal Teddy",
-    "OG Hellfire",
-    "OG Archangel",
-    "OG Koi",
-    "OG Duality",
+    
 
     -- ⭐ Replaced Basilisks
-    "OG Fire Basilisk",
-    "OG Ice Basilisk",
-    "OG Air Basilisk",
-    "OG Electric Basilisk",
-    "Prismidium",
 
-    "OG Godly Gem",
-    "OG King Kitty",
-    "OG Dementor",
+
+
 
     -- ⭐ Food Egg
     "Infinity Wisp",
-    "Giant Fall Turkey",
-    "The Cornucopia",
-    "OG Godly Shamrock",
-    "OG Eternal Heart",
-    "Fairylight Kitsune",
-    "Pumpkin Pie",
-    "OG Love Thief",
-    "OG Wolflord",
-    "OG Soul Heart",
-    "Mega Mech",
-    "OG OwOlord",
-    "Harvest Dogcat",
+
 
     -- ⭐ Other
     "The Infinity Gem",
