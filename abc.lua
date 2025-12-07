@@ -38,7 +38,24 @@ local pets = {
     "OG Demonic Ghost Spirit",
     "OG Cardinal Bunny",
     "Giant NULLvoid",
-    "OG Demoncore"
+    "OG Demoncore",
+    "Peppermint Heart",
+    "Velvet Wolflord",
+    "Santa's Hat",
+    "Holy Bell",
+    "Holy Candle",
+    "Archangel",
+    "Frosted Dogcat",
+    "Morning Star",
+    "Gingerbread Shard",
+    "Festive Snow Jar",
+    "Crystal Snowman",
+    "Sweat Heart",
+    "Snowstorm",
+    "Frosted Bond",
+    "Lenny Box",
+    "Frost Shard",
+    "King Bell" 
 
 }
 
