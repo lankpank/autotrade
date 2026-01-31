@@ -13,7 +13,7 @@ local AUTO_REBIRTH_ENABLED = true
 local CHECK_INTERVAL = 5
 
 local ALLOWED_SECRET_NAMES = {
-    ["Aero Heart"] = true,
+    ["Retro Pyramidium"] = true,
     ["Giftbox King Doggy"] = true,
     ["Giant Bongo Kitty"] = true
 }
