@@ -1,59 +1,54 @@
 local pets = {
     -- Existing
-    "OG Morning Star",
-    "Flake Spirit",
-    "OG Soulflake",
-    "Kuuhenki",
-    "Giant DOOF",
-    "Rudolph Shock",
-    "Cursed King",
-    "Santa's Giftbag",
-    "OG Holy Bell",
-    "King Spitty",
-    "Grand Guardian",
-    "God Tamer",
-    "Guardian Angel",
-    "Shadow Raven",
-    "OG Lucky Pyramidium",
-    "OG Hellshard",
-    "OG Overlord Plushie",
-    "Gigantic Spitty",
+"LOL",
+"Royal Lion",
+"Dark Omen",
+"Pig Tophat",
+"Dinosaur Tophat",
+"Deer Tophat",
+"Azure Fate",
+"Seraph Tophat",
+"Pufferfish Tophat",
+"Bruh Tophat",
+"Silly Doggy Tophat",
+"Leviathan Tophat",
+"Giant Chocolate Chicken Tophat",
+"Avernus Tophat",
+"Bubble Circus Show",
+"Giant Bongo Kitty",
+"Encore",
+"Symphonic Hieromphant",
+"Tophat Spitty",
+"Clown Round",
+"Clown Rigby",
+"Festival One",
+"Chroma Star",
+"Nexus",
+"Serendipity",
+"Void Soul",
+"Leviathan Plushie",
+"Fancy Dragon Plushie",
+"Balloon Doggy",
+"Elephant Plushie",
+"Stellar Acheron",
+"Secret Circus Stack",
+"Circus Monster",
+"Ice Cream Fairy",
+"Providence",
+"Elegant Emerald",
+"Starcaster",
+"Twilight Opal",
+"Cyber Pyramidium",
+"Rockstar Leviathan",
+"FutureWebsiteOwner Plushie",
+"Neon Prototype",
+"Shadow Crystal Shard",
+"Dark Gryphon",
+"Star Titan",
+"Mythic Dark Jester",
+"Robot Tophat",
+"Super Tophat Stack"
 
-    -- ⭐ OG Secrets
-    
-
-    -- ⭐ Replaced Basilisks
-
-
-
-
-    -- ⭐ Food Egg
-    "Infinity Wisp",
-
-
-    -- ⭐ Other
-    "The Infinity Gem",
-    "OG Radiant One",
-    "OG Angelic Ghost Spirit",
-    "OG Demonic Ghost Spirit",
-    "OG Cardinal Bunny",
-    "Peppermint Heart",
-    "Velvet Wolflord",
-    "Santa's Hat",
-    "Holy Bell",
-    "Holy Candle",
-    "Archangel",
-    "Frosted Dogcat",
-    "Morning Star",
-    "Gingerbread Shard",
-    "Festive Snow Jar",
-    "Crystal Snowman",
-    "Sweet Heart",
-    "Snowstorm",
-    "Frosted Bond",
-    "Lenny Box",
-    "Frost Shard",
-    "King Bell" 
 
 }
 
