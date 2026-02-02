@@ -1,4 +1,4 @@
-script_key="uyNaIXklQBBXrGYmwsrXtemOcutXRSVc";
+script_key="XYdAkPyUuYSNwQNrrcSgjvXWpixJRWje";
 
 getgenv().bgsiSettings={
 HATCHING_SETTINGS={
@@ -73,9 +73,9 @@ MINIGAME_SETTINGS={
   GOLDEN_DICE_AMOUNT=2,
   },
 ENCHANT_SETTINGS={
-  ENCHANT_PETS=true,
-  ENCHANT_SECRETS=true,
-  ENCHANT_LEGENDARY=true,
+  ENCHANT_PETS=false,
+  ENCHANT_SECRETS=false,
+  ENCHANT_LEGENDARY=false,
   USE_SHADOW_CRYSTAL=true,
   SECRET_PET_ENCHANTMENTS={
     ["Secret Hunter"]={Tier=1,HigherTiers=true,Prio=true},
