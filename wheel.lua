@@ -7,7 +7,7 @@ local LocalData = require(ReplicatedStorage.Client.Framework.Services.LocalData)
 local ItemUtil = require(ReplicatedStorage.Shared.Utils.Stats.ItemUtil)
 local Remote = require(ReplicatedStorage.Shared.Framework.Network.Remote)
 
-local TICKET_ITEM = { Type = "Powerup", Name = "Valentine's Spin Ticket", Amount = 1 }
+local TICKET_ITEM = { Type = "Powerup", Name = "Spring Spin Ticket", Amount = 1 }
 
 task.spawn(function()
     task.wait(7)
@@ -18,11 +18,11 @@ task.spawn(function()
                 return
             end
 
-            local spinResult = Remote:InvokeServer("ValentinesWheelSpin")
+            local spinResult = Remote:InvokeServer("SpringWheelSpin")
 
             if spinResult then
                 task.wait(SPIN_DELAY)
-                Remote:FireServer("ClaimValentinesWheelSpinQueue")
+                Remote:FireServer("ClaimSpringWheelSpinQueue")
             end
         end)
     end
