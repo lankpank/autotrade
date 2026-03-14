@@ -30,9 +30,9 @@ local function SecretBounty(daysAhead)
     end
 
     local secretBounties = {
-        { Name = "Lucky Pyramidium", Chance = 8e-8 },
-        { Name = "OG Hellshard", Chance = 2.5e-7 },
-        { Name = "OG Overlord Plushie", Chance = 1e-7 },
+        { Name = "Essence Of Life", Chance = 1.00e-10 },
+        { Name = "Prismatic Sunflower", Chance = 2.00e-10 },
+        { Name = "Spring Dragon", Chance = 1.00e-09 },
     }
 
     local possibleEggs = { "Common Egg" }
