@@ -1,6 +1,7 @@
 --[[
     1rzHub Lite - Standalone Present Rain Collector
     Automatically collects falling gifts (Present Rain event)
+    With automatic memory cleanup
 ]]
 
 -- Wait for game to load
@@ -17,6 +18,35 @@ local remote = RemoteFolder:WaitForChild("RemoteEvent")
 
 -- Track which gifts we've already collected to avoid duplicates
 local collectedGiftIds = {}
+local collectedGiftTimes = {} -- Track when each gift was collected
+
+-- Cleanup old gift IDs every 5 minutes (gifts only last ~2-3 minutes)
+local CLEANUP_INTERVAL = 300 -- 5 minutes
+local GIFT_MAX_AGE = 240 -- 4 minutes (gifts are gone by then)
+
+-- Function to clean up old gift IDs
+local function cleanupOldGiftIds()
+    local now = os.time()
+    local removed = 0
+    for giftId, collectTime in pairs(collectedGiftTimes) do
+        if now - collectTime > GIFT_MAX_AGE then
+            collectedGiftIds[giftId] = nil
+            collectedGiftTimes[giftId] = nil
+            removed = removed + 1
+        end
+    end
+    if removed > 0 then
+        print(string.format("[Present Rain] Cleaned up %d old gift IDs (table size: %d)", removed, getn? #collectedGiftIds or table.getn? #next))
+    end
+end
+
+-- Start cleanup loop
+task.spawn(function()
+    while true do
+        task.wait(CLEANUP_INTERVAL)
+        cleanupOldGiftIds()
+    end
+end)
 
 -- Function to collect a present rain gift
 local function collectPresentRain(giftInstance)
@@ -30,6 +60,8 @@ local function collectPresentRain(giftInstance)
     if collectedGiftIds[giftId] then return end
     
     collectedGiftIds[giftId] = true
+    collectedGiftTimes[giftId] = os.time()
+    
     pcall(function()
         remote:FireServer("CollectPresentRain", giftId)
         print("[Present Rain] Collected:", giftId)
@@ -63,6 +95,7 @@ local function startPresentRainCollector()
     end
     
     print("[Present Rain] Collector activated! Waiting for falling gifts...")
+    print("[Present Rain] Memory cleanup every 5 minutes")
     
     -- Collect any existing gifts
     for _, gift in ipairs(presentRainFolder:GetChildren()) do
