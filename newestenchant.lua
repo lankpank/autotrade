@@ -3,7 +3,7 @@ local Players = game:GetService("Players")
 local LocalData = require(RS.Client.Framework.Services.LocalData)
 local RemoteEvent = RS.Shared.Framework.Network.Remote.RemoteEvent
 
-local target = "determination"
+local target = "secret-hunter"
 local done = {}
 
 -- Function to process pets
