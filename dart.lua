@@ -22,9 +22,9 @@ local difficulties = {"Medium"}
 task.spawn(function()
     while true do
         for _, diff in ipairs(difficulties) do
-            remote:FireServer("SkipMinigameCooldown", "Halloween Darts")
-            remote:FireServer("StartMinigame", "Halloween Darts", diff)
-            remote:FireServer("StartMinigame", "Halloween Darts", diff)
+            remote:FireServer("SkipMinigameCooldown", "Egg Darts")
+            remote:FireServer("StartMinigame", "Egg Darts", diff)
+            remote:FireServer("StartMinigame", "Egg Darts", diff)
             task.wait(0.5)
         end
     end
