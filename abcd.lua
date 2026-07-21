@@ -1,39 +1,24 @@
 local pets = {
 -- Core drops
-"Money Mouth",
-"Pot O' Doggy",
+"Crowned Soul",
+"Majesty",
 
 -- Lucky Catcher line
-"Lucky Catcher",
-"The Keeper",
-"Lucky Horseshoe",
-"Godly Shamrock",
-"Robot 2.0",
+"Royal Gemstone",
+"VOID GUARDIAN",
+"Patriotic Robot 2.0",
+"Firework God",
+"Liberty Torch",
 
 -- Shop / special
-"Lucky Tophat",
-"Lucky Medallion",
-"Pot O' Rainbows",
-"Royal Clover",
+"Patriotic Star",
+"Patriotic Overlord",
+"Patriotic Mush",
+"Giant Lemonade Master",
 
 -- Season / pass
-"Lucky Golden Retriever",
-"Epiphany",
-"Trifolium Spirit",
-"Celtic Shard",
-"The Prophecy",
-"Spirit of Fortune",
-"Unlucky Clover",
-"Jackpot Gem",
-
--- Egg / small pets
-"Lucky Dogcat",
-"Fortune Kraken",
-"Lucky Trophy",
-
--- Special sources
-"Lucky Pyramidium",
-"The Celestial Dragon"
+"Sparkle Sundae Champion",
+"Sunken Treasure",
 }
 
 local HttpService = game:GetService("HttpService")
