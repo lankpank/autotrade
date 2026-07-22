@@ -1,0 +1,242 @@
+if type(getgenv) == "function" then
+    local g = getgenv()
+    if rawget(g, "_1rzHubHardObby_Loaded") then return end
+    g._1rzHubHardObby_Loaded = true
+end
+
+if not game:IsLoaded() then game.Loaded:Wait() end
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+local HttpService = game:GetService("HttpService")
+local RunService = game:GetService("RunService")
+local VIM = game:GetService("VirtualInputManager")
+local CoreGui = game:GetService("CoreGui")
+local player = Players.LocalPlayer
+
+-- ============================================================
+-- Auto rejoin on disconnect
+-- ============================================================
+task.spawn(function()
+    repeat task.wait() until CoreGui:FindFirstChild("RobloxPromptGui")
+    local pg = CoreGui:FindFirstChild("RobloxPromptGui")
+    local po = pg and pg:FindFirstChild("promptOverlay") or pg and pg:WaitForChild("promptOverlay", 30)
+    if not po then return end
+    po.ChildAdded:Connect(function(child)
+        if child.Name == "ErrorPrompt" then
+            task.spawn(function()
+                while true do
+                    pcall(function() game:GetService("TeleportService"):Teleport(game.PlaceId, player) end)
+                    task.wait(2)
+                end
+            end)
+        end
+    end)
+end)
+
+-- ============================================================
+-- Services & Modules
+-- ============================================================
+local RemoteFolder = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Framework"):WaitForChild("Network"):WaitForChild("Remote")
+local remote = RemoteFolder:WaitForChild("RemoteEvent")
+local remotefunction = RemoteFolder:WaitForChild("RemoteFunction")
+
+local LocalData = require(ReplicatedStorage.Client.Framework.Services.LocalData)
+local TimeUtil = require(ReplicatedStorage.Shared.Framework.Utilities.Math.Time)
+
+-- ============================================================
+-- Helper Functions
+-- ============================================================
+local function setHRPCFrame(cf)
+    if typeof(cf) ~= "CFrame" or not player then return false end
+    local char = player.Character or player.CharacterAdded:Wait()
+    local hrp = char:FindFirstChild("HumanoidRootPart") or char:WaitForChild("HumanoidRootPart", 5)
+    if not hrp then return false end
+    hrp.CFrame = cf
+    return true
+end
+
+local function getCooldownNow()
+    if TimeUtil and type(TimeUtil.now) == "function" then
+        local ok, t = pcall(function() return TimeUtil.now() end)
+        if ok and type(t) == "number" then return t end
+    end
+    if workspace and type(workspace.GetServerTimeNow) == "function" then
+        local ok, t = pcall(function() return workspace:GetServerTimeNow() end)
+        if ok and type(t) == "number" then return t end
+    end
+    return os.time()
+end
+
+local function getCooldownEndAt(cooldowns, name)
+    if type(cooldowns) ~= "table" or type(name) ~= "string" then return nil end
+    local direct = cooldowns[name]
+    if type(direct) == "number" then return direct end
+    local want = string.lower(name)
+    for k, v in pairs(cooldowns) do
+        if type(k) == "string" and type(v) == "number" and string.lower(k) == want then
+            return v
+        end
+    end
+    return nil
+end
+
+local function isOnCooldown(cooldowns, name)
+    local endAt = getCooldownEndAt(cooldowns, name)
+    if not endAt then return false end
+    return getCooldownNow() < endAt
+end
+
+-- ============================================================
+-- Hard Obby Configuration
+-- ============================================================
+local HARD_OBBY = {
+    Name = "Hard",
+    PreStartCFrame = CFrame.new(-41529, 10, -20402),
+    -- Updated with your coordinates
+    IslandCFrame = CFrame.new(-1555.83, 5927.05, 22537.33),
+}
+
+-- ============================================================
+-- Spam E Function (keeps pressing E+R)
+-- ============================================================
+local spamERunning = false
+local spamThread = nil
+
+local function startSpamE()
+    if spamERunning then return end
+    spamERunning = true
+    spamThread = task.spawn(function()
+        while spamERunning do
+            VIM:SendKeyEvent(true, Enum.KeyCode.E, false, game)
+            task.wait(0.01)
+            VIM:SendKeyEvent(false, Enum.KeyCode.E, false, game)
+            task.wait(0.01)
+            VIM:SendKeyEvent(true, Enum.KeyCode.R, false, game)
+            task.wait(0.01)
+            VIM:SendKeyEvent(false, Enum.KeyCode.R, false, game)
+            task.wait(0.01)
+        end
+    end)
+end
+
+local function stopSpamE()
+    spamERunning = false
+    if spamThread then
+        spamThread = nil
+    end
+end
+
+-- ============================================================
+-- Main Obby Loop
+-- ============================================================
+local function hardObbyLoop()
+    local lastFireAt = 0
+    local isInObby = false
+    
+    while true do
+        -- Wait for LocalData
+        if not LocalData or not LocalData.IsReady then
+            task.wait(1)
+            continue
+        end
+        
+        local ok, data = pcall(function() return LocalData:Get() end)
+        if not ok or type(data) ~= "table" then
+            task.wait(1)
+            continue
+        end
+        
+        -- Check if Hard obby is on cooldown
+        local cooldowns = data.ObbyCooldowns
+        if type(cooldowns) == "table" and isOnCooldown(cooldowns, "Hard") then
+            -- Still on cooldown - wait and keep spamming E
+            if not spamERunning then
+                startSpamE()
+            end
+            task.wait(1)
+            continue
+        end
+        
+        -- STOP SPAMMING E - about to do obby
+        if spamERunning then
+            stopSpamE()
+        end
+        
+        -- Prevent spamming StartObby too frequently
+        local now = tick()
+        if now - lastFireAt < 12 then
+            task.wait(1)
+            continue
+        end
+        
+        -- ============================================================
+        -- DO HARD OBBY
+        -- ============================================================
+        isInObby = true
+        
+        -- Teleport to start area
+        pcall(function()
+            setHRPCFrame(HARD_OBBY.PreStartCFrame)
+        end)
+        task.wait(0.75)
+        
+        -- Spam StartObby for 1 second
+        local burstEnd = tick() + 1
+        while tick() < burstEnd do
+            pcall(function() remote:FireServer("StartObby", HARD_OBBY.Name) end)
+            task.wait(0)
+        end
+        
+        -- Teleport to Hard island (using your coordinates)
+        task.wait(1)
+        pcall(function()
+            setHRPCFrame(HARD_OBBY.IslandCFrame)
+        end)
+        
+        -- Wait for obby to complete (give it time)
+        task.wait(3)
+        
+        -- Reset timestamp
+        lastFireAt = tick()
+        isInObby = false
+        
+        -- ============================================================
+        -- OBBY DONE - START SPAMMING E AGAIN
+        -- ============================================================
+        if not spamERunning then
+            startSpamE()
+        end
+        
+        -- Wait before checking cooldown again
+        task.wait(2)
+    end
+end
+
+-- ============================================================
+-- Start the script
+-- ============================================================
+print("[Hard Obby] Starting...")
+print("[Hard Obby] Will do Hard obby, then spam E until cooldown ends.")
+print("[Hard Obby] Island coordinates: X: -1555.83 Y: 5927.05 Z: 22537.33")
+
+-- Start the main loop
+task.spawn(hardObbyLoop)
+
+-- ============================================================
+-- Cleanup on script stop (optional)
+-- ============================================================
+-- To stop the script, you can run:
+-- stopSpamE()
+-- _G._1rzHubHardObby_Loaded = nil
+
+print("[Hard Obby] Running! Press E+R will be spammed between obby runs.")
+
+-- ============================================================
+-- Keep the script alive
+-- ============================================================
+while true do
+    task.wait(60)
+    print("[Hard Obby] Still running...")
+end
