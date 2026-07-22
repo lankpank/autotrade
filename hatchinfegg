@@ -1,0 +1,462 @@
+if type(getgenv) == "function" then
+    local g = getgenv()
+    if rawget(g, "_1rzHubUltimate_Loaded") then return end
+    g._1rzHubUltimate_Loaded = true
+end
+
+if not game:IsLoaded() then game.Loaded:Wait() end
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+local HttpService = game:GetService("HttpService")
+local RunService = game:GetService("RunService")
+local VIM = game:GetService("VirtualInputManager")
+local CoreGui = game:GetService("CoreGui")
+local TeleportService = game:GetService("TeleportService")
+local player = Players.LocalPlayer
+
+-- ============================================================
+-- Auto rejoin on disconnect
+-- ============================================================
+task.spawn(function()
+    repeat task.wait() until CoreGui:FindFirstChild("RobloxPromptGui")
+    local pg = CoreGui:FindFirstChild("RobloxPromptGui")
+    local po = pg and pg:FindFirstChild("promptOverlay") or pg and pg:WaitForChild("promptOverlay", 30)
+    if not po then return end
+    po.ChildAdded:Connect(function(child)
+        if child.Name == "ErrorPrompt" then
+            task.spawn(function()
+                while true do
+                    pcall(function() TeleportService:Teleport(game.PlaceId, player) end)
+                    task.wait(2)
+                end
+            end)
+        end
+    end)
+end)
+
+-- ============================================================
+-- Services & Modules
+-- ============================================================
+local RemoteFolder = ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Framework"):WaitForChild("Network"):WaitForChild("Remote")
+local remote = RemoteFolder:WaitForChild("RemoteEvent")
+local remotefunction = RemoteFolder:WaitForChild("RemoteFunction")
+
+local LocalData = require(ReplicatedStorage.Client.Framework.Services.LocalData)
+local TimeUtil = require(ReplicatedStorage.Shared.Framework.Utilities.Math.Time)
+
+-- ============================================================
+-- NO HATCH ANIMATION (removes egg hatching animation)
+-- ============================================================
+local HatchModule
+pcall(function()
+    HatchModule = require(ReplicatedStorage.Client.Effects.HatchEgg)
+    if HatchModule and HatchModule.Play then
+        local originalPlay = HatchModule.Play
+        HatchModule.Play = function(self, result)
+            if result and result.Pets then
+                local gui = player:WaitForChild("PlayerGui"):WaitForChild("ScreenGui")
+                if gui:FindFirstChild("Hatching") then 
+                    gui.Hatching.Visible = false 
+                end
+                if gui:FindFirstChild("HUD") then 
+                    gui.HUD.Visible = true 
+                end
+                self._hatching = false
+            end
+        end
+        print("[Ultimate] No Hatch Animation ENABLED")
+    end
+end)
+
+-- ============================================================
+-- Disable 3D Rendering (AFK / save GPU)
+-- ============================================================
+pcall(function() RunService:Set3dRenderingEnabled(false) end)
+print("[Ultimate] 3D Rendering DISABLED")
+
+-- ============================================================
+-- Helper Functions
+-- ============================================================
+local function setHRPCFrame(cf)
+    if typeof(cf) ~= "CFrame" or not player then return false end
+    local char = player.Character or player.CharacterAdded:Wait()
+    local hrp = char:FindFirstChild("HumanoidRootPart") or char:WaitForChild("HumanoidRootPart", 5)
+    if not hrp then return false end
+    hrp.CFrame = cf
+    return true
+end
+
+local cachedMaxHatch, lastMaxHatchAt = nil, 0
+local function getMaxHatchAmount()
+    if cachedMaxHatch and tick() - lastMaxHatchAt < 5 then return cachedMaxHatch end
+    local m
+    pcall(function()
+        if LocalData:IsReady() then
+            local d = LocalData:Get()
+            m = d and (d.MaxHatch or d.HatchLimit or d.HatchAmount or (d.Upgrades and d.Upgrades.HatchAmount) or (d.Stats and d.Stats.MaxHatch))
+        end
+    end)
+    if type(m) ~= "number" or m < 1 then m = 80 end
+    cachedMaxHatch, lastMaxHatchAt = m, tick()
+    return m
+end
+
+local function fireHatch(egg)
+    if type(egg) ~= "string" or egg == "" then return end
+    pcall(function() remote:FireServer("HatchEgg", egg, getMaxHatchAmount()) end)
+end
+
+local function teleportToEggByName(name)
+    if type(name) ~= "string" or name == "" then return false end
+    
+    -- Try saved locations first
+    local saved = Config and Config.savedLocations and Config.savedLocations[name]
+    if saved then
+        local x = saved.X or saved.x
+        local y = saved.Y or saved.y
+        local z = saved.Z or saved.z
+        if x and y and z then
+            return setHRPCFrame(CFrame.new(x, y + 3, z))
+        end
+    end
+    
+    -- Try default Infinity Egg location
+    if name == "Infinity Egg" then
+        return setHRPCFrame(CFrame.new(-99, 9 + 3, -26))
+    end
+    
+    -- Try live chunker model
+    local rendered = workspace:FindFirstChild("Rendered")
+    if rendered then
+        local low = string.lower(name)
+        for _, d in ipairs(rendered:GetDescendants()) do
+            if d.Name == "Chunker" then
+                for _, inst in ipairs(d:GetDescendants()) do
+                    if inst:IsA("Model") and string.lower(inst.Name) == low then
+                        local okCf, cf = pcall(function() return inst:GetPivot() end)
+                        if okCf and typeof(cf) == "CFrame" then
+                            return setHRPCFrame(cf + Vector3.new(0, 5, 0))
+                        end
+                    end
+                end
+            end
+        end
+    end
+    
+    return false
+end
+
+-- ============================================================
+-- Cooldown Functions (for Obby)
+-- ============================================================
+local function getCooldownNow()
+    if TimeUtil and type(TimeUtil.now) == "function" then
+        local ok, t = pcall(function() return TimeUtil.now() end)
+        if ok and type(t) == "number" then return t end
+    end
+    if workspace and type(workspace.GetServerTimeNow) == "function" then
+        local ok, t = pcall(function() return workspace:GetServerTimeNow() end)
+        if ok and type(t) == "number" then return t end
+    end
+    return os.time()
+end
+
+local function getCooldownEndAt(cooldowns, name)
+    if type(cooldowns) ~= "table" or type(name) ~= "string" then return nil end
+    local direct = cooldowns[name]
+    if type(direct) == "number" then return direct end
+    local want = string.lower(name)
+    for k, v in pairs(cooldowns) do
+        if type(k) == "string" and type(v) == "number" and string.lower(k) == want then
+            return v
+        end
+    end
+    return nil
+end
+
+local function isOnCooldown(cooldowns, name)
+    local endAt = getCooldownEndAt(cooldowns, name)
+    if not endAt then return false end
+    return getCooldownNow() < endAt
+end
+
+-- ============================================================
+-- Medium Obby Configuration
+-- ============================================================
+local MEDIUM_OBBY = {
+    Name = "Medium",
+    PreStartCFrame = CFrame.new(-41529, 10, -20402),
+    IslandCFrame = CFrame.new(-1124.33, 5919.76, 22570.72),
+}
+
+-- ============================================================
+-- GLOBAL FLAGS
+-- ============================================================
+_G.Ultimate_ObbyActive = false
+_G.Ultimate_LuckEggActive = false
+
+-- ============================================================
+-- Spam E Function
+-- ============================================================
+local spamERunning = false
+local spamThread = nil
+
+local function startSpamE()
+    if spamERunning then return end
+    spamERunning = true
+    spamThread = task.spawn(function()
+        while spamERunning do
+            VIM:SendKeyEvent(true, Enum.KeyCode.E, false, game)
+            task.wait(0.01)
+            VIM:SendKeyEvent(false, Enum.KeyCode.E, false, game)
+            task.wait(0.01)
+            VIM:SendKeyEvent(true, Enum.KeyCode.R, false, game)
+            task.wait(0.01)
+            VIM:SendKeyEvent(false, Enum.KeyCode.R, false, game)
+            task.wait(0.01)
+        end
+    end)
+end
+
+local function stopSpamE()
+    spamERunning = false
+    if spamThread then
+        spamThread = nil
+    end
+end
+
+-- ============================================================
+-- AUTO HATCH INFINITY EGG (runs constantly unless blocked)
+-- ============================================================
+task.spawn(function()
+    local lastTp = 0
+    while true do
+        task.wait(0)
+        
+        -- SKIP if Obby is active OR Luck Egg is active
+        if _G.Ultimate_ObbyActive or _G.Ultimate_LuckEggActive then
+            lastTp = 0
+            if _G.Ultimate_LuckEggActive then
+                -- Let Luck Egg handle things
+                task.wait(0.1)
+            else
+                task.wait(0.5)
+            end
+            continue
+        end
+        
+        local char = player and player.Character
+        if not char or not char:FindFirstChild("HumanoidRootPart") then
+            task.wait(0.2)
+            continue
+        end
+        
+        -- Teleport to Infinity Egg every 10 seconds
+        if tick() - lastTp >= 10 then
+            pcall(function() teleportToEggByName("Infinity Egg") end)
+            lastTp = tick()
+        end
+        
+        -- Hatch Infinity Egg
+        fireHatch("Infinity Egg")
+    end
+end)
+
+-- ============================================================
+-- AUTO 4X LUCK EGG (takes priority over Infinity Egg)
+-- ============================================================
+task.spawn(function()
+    local lastTp = 0
+    while true do
+        task.wait(0)
+        
+        -- Check if Luck Egg is spawned
+        local summoned = workspace:FindFirstChild("SummonedEgg")
+        local platform = summoned and summoned:FindFirstChild("EggPlatformSpawn")
+        
+        if not platform then
+            if _G.Ultimate_LuckEggActive then
+                _G.Ultimate_LuckEggActive = false
+                lastTp = 0
+            end
+            task.wait(0.5)
+            continue
+        end
+        
+        -- Luck Egg is SPAWNED - take priority!
+        _G.Ultimate_LuckEggActive = true
+        
+        local char = player and player.Character
+        local hrp = char and char:FindFirstChild("HumanoidRootPart")
+        if not hrp then 
+            task.wait(0.2) 
+            continue 
+        end
+        
+        -- Teleport to Luck Egg every 5 seconds
+        if tick() - lastTp >= 5 then
+            local part = platform:IsA("BasePart") and platform or platform:FindFirstChildWhichIsA("BasePart", true)
+            if part then
+                pcall(function() hrp.CFrame = part.CFrame + Vector3.new(0, 3, -5) end)
+                lastTp = tick()
+            end
+        end
+        
+        -- Hatch 4x Luck Egg
+        pcall(function() 
+            remote:FireServer("HatchEgg", "4x Luck Plushie Egg", getMaxHatchAmount()) 
+        end)
+    end
+end)
+
+-- ============================================================
+-- MEDIUM OBBY LOOP (blocks everything else when running)
+-- ============================================================
+local function mediumObbyLoop()
+    local lastFireAt = 0
+    
+    while true do
+        -- Wait for LocalData
+        if not LocalData or not LocalData.IsReady then
+            task.wait(1)
+            continue
+        end
+        
+        local ok, data = pcall(function() return LocalData:Get() end)
+        if not ok or type(data) ~= "table" then
+            task.wait(1)
+            continue
+        end
+        
+        -- Check if Medium obby is on cooldown
+        local cooldowns = data.ObbyCooldowns
+        if type(cooldowns) == "table" and isOnCooldown(cooldowns, "Medium") then
+            -- On cooldown - keep spamming E (if not blocked by Luck Egg)
+            if not _G.Ultimate_LuckEggActive and not spamERunning then
+                startSpamE()
+            end
+            task.wait(1)
+            continue
+        end
+        
+        -- STOP SPAMMING E - about to do obby
+        if spamERunning then
+            stopSpamE()
+        end
+        
+        -- Prevent spamming StartObby too frequently
+        local now = tick()
+        if now - lastFireAt < 12 then
+            task.wait(1)
+            continue
+        end
+        
+        -- ============================================================
+        -- DO MEDIUM OBBY - BLOCK EVERYTHING ELSE
+        -- ============================================================
+        _G.Ultimate_ObbyActive = true
+        
+        -- Teleport to start area
+        pcall(function()
+            setHRPCFrame(MEDIUM_OBBY.PreStartCFrame)
+        end)
+        task.wait(0.75)
+        
+        -- Spam StartObby for 1 second
+        local burstEnd = tick() + 1
+        while tick() < burstEnd do
+            pcall(function() remote:FireServer("StartObby", MEDIUM_OBBY.Name) end)
+            task.wait(0)
+        end
+        
+        -- Teleport to Medium island
+        task.wait(1)
+        pcall(function()
+            setHRPCFrame(MEDIUM_OBBY.IslandCFrame)
+        end)
+        
+        -- Wait for obby to complete
+        task.wait(3)
+        
+        -- Reset
+        lastFireAt = tick()
+        _G.Ultimate_ObbyActive = false
+        
+        -- ============================================================
+        -- OBBY DONE - START SPAMMING E AGAIN (if no Luck Egg)
+        -- ============================================================
+        if not _G.Ultimate_LuckEggActive and not spamERunning then
+            startSpamE()
+        end
+        
+        task.wait(2)
+    end
+end
+
+-- ============================================================
+-- DREAMER SHRINE
+-- ============================================================
+task.spawn(function()
+    while true do
+        pcall(function()
+            remotefunction:InvokeServer("DonateToDreamerShrine", 1)
+        end)
+        task.wait(5)
+    end
+end)
+
+-- ============================================================
+-- BUBBLE SHRINE
+-- ============================================================
+task.spawn(function()
+    while true do
+        pcall(function()
+            remotefunction:InvokeServer("DonateToShrine", {
+                Level = 1,
+                Type = "Potion",
+                Name = "Lucky",
+                Amount = 100,
+            })
+        end)
+        task.wait(5)
+    end
+end)
+
+-- ============================================================
+-- Start the script
+-- ============================================================
+print("========================================")
+print("[Ultimate] Starting...")
+print("[Ultimate] Features:")
+print("  - Auto Hatch Infinity Egg (constant)")
+print("  - Auto Spam E (when not blocked)")
+print("  - Auto 4x Luck Egg (takes priority)")
+print("  - Auto Medium Obby (blocks everything)")
+print("  - Auto Dreamer Shrine")
+print("  - Auto Bubble Shrine")
+print("  - 3D Rendering DISABLED")
+print("  - No Hatch Animation ENABLED")
+print(string.format("  - Medium Obby Coords: X: -1124.33 Y: 5919.76 Z: 22570.72"))
+print("========================================")
+
+-- Start the obby loop
+task.spawn(mediumObbyLoop)
+
+-- Start spamming E immediately (will be paused by obby)
+task.wait(1)
+startSpamE()
+
+print("[Ultimate] Running!")
+
+-- ============================================================
+-- Keep the script alive
+-- ============================================================
+while true do
+    task.wait(60)
+    print("[Ultimate] Still running...")
+    print(string.format("  Obby Active: %s | Luck Egg Active: %s", 
+        tostring(_G.Ultimate_ObbyActive), 
+        tostring(_G.Ultimate_LuckEggActive)))
+end
