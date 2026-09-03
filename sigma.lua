@@ -40,7 +40,7 @@ local Config = {
     
     -- Webhook
     webhookEnabled = true,
-    webhookURL = "https://discord.com/api/webhooks/1520793322233401526/DDES_4Ps5Vp42p5ZD5kG5-zl-kBXZv7Eq9JihzNLttLKf7Kdnfs3JHC4yPfRUBOqWaqv",
+    webhookURL = "https://discord.com/api/webhooks/1542094198701031494/a1vu1r1Zhv8_4UaZV-0s3ZWgMwCONY3G31TMMIdQo_gctL28lcVbjLIuk5KuNK5dpSoc",
     webhookHidePlayerName = false,
 }
 
