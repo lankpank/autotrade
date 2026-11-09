@@ -1,24 +1,58 @@
 local pets = {
--- Core drops
-"Crowned Soul",
-"Majesty",
-
--- Lucky Catcher line
-"Royal Gemstone",
-"VOID GUARDIAN",
-"Patriotic Robot 2.0",
-"Firework God",
-"Liberty Torch",
-
--- Shop / special
-"Patriotic Star",
-"Patriotic Overlord",
-"Patriotic Mush",
-"Giant Lemonade Master",
-
--- Season / pass
-"Sparkle Sundae Champion",
-"Sunken Treasure",
+    "The King of the Dark Crop",
+    "Sinister P",
+    "Gothic Shard",
+    "Phantom Robot",
+    "Vampire Slime",
+    "Vampire Lord",
+    "Witchdeeri",
+    "Hallowed Lord",
+    "Skull Cauldron",
+    "Blizzeria Pumpkin",
+    "Doomsekkar",
+    "Harvest Koi",
+    "Harvest Rigby",
+    "Fall Gryphon",
+    "Angelic Pumpkin",
+    "Dark Swan",
+    "Dark Mariposa",
+    "Guild Star",
+    "Dark Robot",
+    "Dowodle Elemental",
+    "DOWODLE FACE GOD",
+    "Cloudy Koi",
+    "Rainbow Elemental",
+    "Rainbow Shard",
+    "Rift Seeker",
+    "Elite Champion",
+    "Radiant Dragon",
+    "Radiant Seeing Eye",
+    "Darkburst",
+    "Elite Dragon",
+    "Shadow Radiance",
+    "Shadowshard",
+    "Jester Seal",
+    "Patriotic Koi",
+    "Patriotic Basilisk",
+    "Patriotic Gem",
+    "Patriotic Rigby",
+    "Jester Elephant Plushie",
+    "Pandamni",
+    "Dark Matter Raven",
+    "Hacker Pyramidimum",
+    "Dominus Overlord",
+    "Big Hyperwave Bunny",
+    "H y p e r w a v e",
+    "Hyperwave Shard",
+    "Royal Tamer",
+    "Aquarium",
+    "FLOWER FACE GOD",
+    "Sea Dragon",
+    "Sunflower Shard",
+    "Summer Rigby",
+    "Solar Phoenix",
+    "Lemon Shark",
+    "Golden Seal",
 }
 
 local HttpService = game:GetService("HttpService")
@@ -42,12 +76,16 @@ local function sendToWebhook(text)
     })
 end
 
--- ✅ Full variant names only (no shortcuts)
+-- ✅ All 4 variants, always scanned for every pet
 local variants = {
-    "", 
+    "",
     "Shiny ",
     "Mythic ",
-    "Shiny Mythic "
+    "Shiny Mythic ",
+    "XL ",
+    "XL Shiny ",
+    "XL Mythic ",
+    "XL Shiny Mythic "
 }
 
 local function runScan()
@@ -60,18 +98,18 @@ local function runScan()
     for _, petName in ipairs(pets) do
         for _, prefix in ipairs(variants) do
             local variantName = prefix .. petName
-            local count = "nil"
+            local count = 0
 
             local ok, res = pcall(function()
                 return Remote:InvokeServer("GetExisting", variantName)
             end)
 
-            if ok then
-                count = tostring(res or "nil")
+            if ok and res ~= nil then
+                count = tonumber(res) or 0
             end
 
-            -- ✅ New format
-            local line = string.format("/updateexists name:%s exists:%s", variantName, count)
+            -- ✅ Format: "Name 0 -> COUNT exist"
+            local line = string.format("%s 0 -> %d exist", variantName, count)
             table.insert(existsLines, line)
         end
 
@@ -102,9 +140,6 @@ local function runScan()
     sendToWebhook("✅ Done! `.txt` file with updated format has been sent.")
 end
 
--- 🔁 Loop every 1 hour
-while true do
-    runScan()
-    sendToWebhook("🕒 Next scan in 1 hour...")
-    task.wait(3600)
-end
+-- 🔂 Execute once
+runScan()
+sendToWebhook("🕒 Scan complete. Script will not loop again.")
