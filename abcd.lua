@@ -101,7 +101,7 @@ local HttpRequest =
     or (krnl and request)
 
 -- EDIT YOUR WEBHOOK HERE
-local webhook = "https://discord.com/api/webhooks/1473543151565406260/gjmYRjueYL5cPZcy07GOHQmrhhx-aSjeqBqivTUitzY4jg2zf6L-S6DEwn28yJU7vmTV"
+local webhook = ""
 
 if not HttpRequest then
     error("HTTP request function not found.")
