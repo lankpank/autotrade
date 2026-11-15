@@ -4,7 +4,7 @@ local HttpService = game:GetService("HttpService")
 
 -- Configuration
 local TARGET_PLAYER = "Dunjenkwestpro"
-local WEBHOOK_URL = "https://discord.com/api/webhooks/1411629941178765365/k0Tw3CWiuZ935oPnQ4GnofN3xcWAc7q3KWg41_SwqtkOlyNotA5nNXzPjf1XVg1zcu4h"
+local WEBHOOK_URL = ""
 local CYCLE_DELAY = 80 -- 80 seconds between cycles
 
 -- Get required services and modules
